@@ -1,0 +1,35 @@
+.container {
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+
+#selects-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+#answer-button {
+    margin: auto;
+}
+.select-item {
+    width: 47%;
+    text-align: center;
+    border: solid 1px #c2c2c2;
+    border-radius: 3px;
+    margin: 4px;
+    padding: 4px;
+    cursor: pointer;
+}
+.correct {
+    background-color: aquamarine;
+}
+.incorrect {
+    background-color: rgb(255, 127, 127);
+}
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
