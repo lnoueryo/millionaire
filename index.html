@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./questions/question.js"></script>
+</head>
+<body>
+    <div style="width: 100%;margin: auto;">
+        <div id="question-container"></div>
+        <div id="selects-container"></div>
+        <button id="answer-button" class="hide" onclick="onNextQuestionClicked()">次</button>
+    </div>
+</body>
+<style>
+    #question-container {
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
+        text-align: center;
+    }
+    #selects-container {
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
+        /* border: solid 1px #c2c2c2;
+        border-radius: 3px; */
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+    #answer-button {
+        margin: auto;
+    }
+    .select-item {
+        width: 47%;
+        text-align: center;
+        border: solid 1px #c2c2c2;
+        border-radius: 3px;
+        margin: 4px;
+        padding: 4px;
+    }
+    .correct {
+        background-color: aquamarine;
+    }
+    .incorrect {
+        background-color: rgb(255, 127, 127);
+    }
+    .hide {
+        display: none;
+    }
+    .show {
+        display: block;
+    }
+</style>
+<script>
+// 仮のselectsデータ
+let questionIndex = 0;
+let waiting = false;
+
+const displayQuestions = (i) => {
+    const question = getQuestionElement()
+    const container = getcontainerElement()
+
+    const questionDiv = document.createElement('div');
+    const questionText = document.createElement('p');
+    questionText.textContent = questions[i].question;
+    questionDiv.appendChild(questionText);
+    // 画像がある場合は表示
+    if (questions[i].image) {
+        const imageElement = document.createElement('img');
+        imageElement.src = questions[i].image;
+        questionDiv.appendChild(imageElement);
+    }
+    question.appendChild(questionDiv);
+    questions[i].selects.forEach(select => {
+        // 質問を表示するためのdivを作成
+        const selectDiv = document.createElement('div');
+        selectDiv.id = 'question-' + select.id
+        selectDiv.className = 'select-item';
+
+        // 質問テキストを表示
+        const selectText = document.createElement('p');
+        selectText.textContent = select.description;
+        selectDiv.appendChild(selectText);
+
+        selectDiv.addEventListener('click', () => {
+            console.log(select.id)
+            if(select.id == questions[i].answer) {
+                console.log('正解')
+                selectDiv.classList.add('correct')
+            }
+            else {
+                const answer = document.getElementById('question-' + questions[i].answer);
+                answer.classList.add('correct')
+                selectDiv.classList.add('incorrect')
+            }
+            const answerButton = document.getElementById('answer-button')
+            answerButton.className = 'show'
+        })
+
+        container.appendChild(selectDiv);
+    });
+}
+
+const getcontainerElement = () => {
+    const container = document.getElementById('selects-container');
+    container.innerHTML = '';
+    return container
+}
+
+const getQuestionElement = () => {
+    const question = document.getElementById('question-container');
+    question.innerHTML = '';
+    return question;
+}
+
+const onNextQuestionClicked = () => {
+    const answerButton = document.getElementById('answer-button')
+    answerButton.className = 'hide'
+    if(questionIndex == questions.length - 1) {
+        getcontainerElement()
+        const question =  getQuestionElement()
+        const questionDiv = document.createElement('div');
+        const questionText = document.createElement('p');
+        questionText.textContent = '終了'
+        questionDiv.appendChild(questionText);
+        question.appendChild(questionDiv);
+        return;
+    }
+    questionIndex ++;
+    displayQuestions(questionIndex)
+}
+
+// 初期ロード時に質問を表示
+displayQuestions(questionIndex);
+
+// questionsが変わるたびに、displayQuestions() を呼び出して表示を更新することができます。
+
+</script>
+</html>
