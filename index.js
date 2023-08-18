@@ -2,7 +2,7 @@ let questionIndex = 0;
 let waiting = false;
 let score = 0;
 
-const displayQuestion = (i) => {
+const createQuestion = (i) => {
     const question = questions[i]
     createContent(question)
     createOptions(question)
@@ -10,7 +10,7 @@ const displayQuestion = (i) => {
 
 const resetElement = (id) => {
     const el = document.getElementById(id);
-    el.innerHTML = '';
+    while (el.firstChild) el.removeChild(el.firstChild);
     return el;
 }
 
@@ -19,7 +19,7 @@ const onOptionClicked = (option, optionDiv) => {
     if(waiting) return;
     console.debug(option.id)
     waiting = true;
-    if(option.id == question.answer) {
+    if(option.id === question.answer) {
         console.debug('正解');
         optionDiv.classList.add('correct');
         score ++;
@@ -36,7 +36,7 @@ const onNextQuestionClicked = () => {
     waiting = false;
     const answerButton = document.getElementById('answer-button')
     answerButton.className = 'hide';
-    if(questionIndex == questions.length - 1) {
+    if(questionIndex === questions.length - 1) {
         resetElement('options-container')
         const contentEl =  resetElement('content-container');
         const contentDiv = document.createElement('div');
@@ -50,7 +50,7 @@ const onNextQuestionClicked = () => {
         return;
     }
     questionIndex ++;
-    displayQuestion(questionIndex);
+    createQuestion(questionIndex);
 }
 
 const updateScore = (score) => {
@@ -105,7 +105,7 @@ const createOption = (option) => {
 const main = () => {
   questionIndex = 0;
   score = 0;
-  displayQuestion(questionIndex);
+  createQuestion(questionIndex);
   updateScore(score);
 }
 
